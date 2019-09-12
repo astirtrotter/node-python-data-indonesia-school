@@ -330,6 +330,4 @@ ASALocalRun/
 .mfractor/
 
 # data
-/data-catcher/address.txt
-/data-catcher/data
-/data-catcher/data_dian
+/data-catcher
