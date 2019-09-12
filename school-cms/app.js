@@ -10,6 +10,7 @@ var methodOverride = require('method-override');
 var fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
+var convertRouter = require('./routes/convert');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use(fileUpload({
 }));
 
 app.use('/', indexRouter);
+app.use('/convert', convertRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
