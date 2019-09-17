@@ -7,10 +7,19 @@ html
     include partials/styles
     include partials/scripts
   body
+    nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
+      a.navbar-brand(href='/') Home
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.navbar-toggler-icon
+      .collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item
+            a.nav-link(href='/download') Download
+          li.nav-item
+            a.nav-link(href='/convert') Convert
 
-    +flash-messages(messages)
-
-    .container
+    .container.mt-4
+      +flash-messages(messages)
       block content
     
     .py-5

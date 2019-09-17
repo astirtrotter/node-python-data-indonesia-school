@@ -6,6 +6,10 @@ const logOutput = (name) => (message) => console.log(`[${name}] ${message}`);
 
 router.get('/', async function (req, res, next) {
   res.render('download', { title: 'Download' });
+});
+
+router.post('/', function (req, res, next) {
+  res.json({ success: true });
   // try {
   //   const output = await downloadJson();
   //   logOutput('main')(output.message);

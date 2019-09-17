@@ -3,7 +3,7 @@ extends layout
 block content
   form(method='POST', action=`/download`)
     label(for='url') URL
-    input#url.form-control(type='text', name='url' required)
-    label(for='destination') Destination
-    input#destination.form-control(type='text', name='destination' required)
+    input#url.form-control(type='text', name='url', placeholder='e.g. http://dapo.dikdasmen.kemdikbud.go.id/sp/2/030200' required)
+    label.mt-4(for='destination') Destination
+    input#destination.form-control(type='text', name='destination', placeholder='Directory Name' required)
     button.mt-4.btn.btn-primary(type='submit') Download
