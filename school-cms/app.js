@@ -7,9 +7,18 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var flash = require('connect-flash');
 var methodOverride = require('method-override');
-var fileUpload = require('express-fileupload');
+// var fileUpload = require('express-fileupload');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 
 var app = express();
+var sessionStore = new MySQLStore({
+  host: process.env.MYSQL_HOST,
+  port: process.env.MYSQL_PORT,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,13 +31,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 app.use(flash());
-app.use(fileUpload({
-  createParentPath: true,
-  limits: {
-    fileSize: 50 * 1024 * 1024 // 50 MB
-  }
+// app.use(fileUpload({
+//   createParentPath: true,
+//   limits: {
+//     fileSize: 50 * 1024 * 1024 // 50 MB
+//   }
+// }));
+app.use(session({
+  key: process.env.SESSION_KEY,
+  secret: process.env.SESSION_SECRET,
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false
 }));
 
+
+// routes
 app.use('/', require('./routes/index'));
 app.use('/convert', require('./routes/convert'));
 app.use('/download', require('./routes/download'));
