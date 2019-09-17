@@ -9,9 +9,6 @@ var flash = require('connect-flash');
 var methodOverride = require('method-override');
 var fileUpload = require('express-fileupload');
 
-var indexRouter = require('./routes/index');
-var convertRouter = require('./routes/convert');
-
 var app = express();
 
 // view engine setup
@@ -32,8 +29,9 @@ app.use(fileUpload({
   }
 }));
 
-app.use('/', indexRouter);
-app.use('/convert', convertRouter);
+app.use('/', require('./routes/index'));
+app.use('/convert', require('./routes/convert'));
+app.use('/download', require('./routes/download'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
