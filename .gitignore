@@ -333,3 +333,6 @@ ASALocalRun/
 data-catcher/
 school-cms/data
 school-cms/address.txt
+
+# environment
+.env
