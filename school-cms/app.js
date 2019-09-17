@@ -7,11 +7,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var flash = require('connect-flash');
 var methodOverride = require('method-override');
-// var fileUpload = require('express-fileupload');
+var fileUpload = require('express-fileupload');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
+var cors = require('cors');
 
 var app = express();
+var passport = require('./middleware/passport');
+
 var sessionStore = new MySQLStore({
   host: process.env.MYSQL_HOST,
   port: process.env.MYSQL_PORT,
@@ -31,12 +34,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 app.use(flash());
-// app.use(fileUpload({
-//   createParentPath: true,
-//   limits: {
-//     fileSize: 50 * 1024 * 1024 // 50 MB
-//   }
-// }));
+app.use(fileUpload({
+  createParentPath: true,
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50 MB
+  }
+}));
 app.use(session({
   key: process.env.SESSION_KEY,
   secret: process.env.SESSION_SECRET,
@@ -44,21 +47,36 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-
+app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // routes
+app.use(function (req, res, next) {
+  let render = res.render;
+  res.render = (view, locals, cb) => {
+    if (typeof locals == 'object') {
+      locals.user = req.user;
+      locals.url = req.url;
+      locals.messages = req.flash();
+    }
+    render.call(res, view, locals, cb);
+  };
+
+  next();
+});
 app.use('/', require('./routes/index'));
 app.use('/convert', require('./routes/convert'));
 app.use('/download', require('./routes/download'));
 app.use('/auth', require('./routes/auth'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError.NotFound());
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
