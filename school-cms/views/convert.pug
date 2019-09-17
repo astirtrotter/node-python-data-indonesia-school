@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Convert
+  form(method='POST', action=`/convert`)
+    label(for='source') Source
+    input#source.form-control(type='text', name='source' required)
+    button.mt-4.btn.btn-primary(type='submit') Convert

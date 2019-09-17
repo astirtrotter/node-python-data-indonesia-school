@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Download
+  form(method='POST', action=`/download`)
+    label(for='url') URL
+    input#url.form-control(type='text', name='url' required)
+    label(for='destination') Destination
+    input#destination.form-control(type='text', name='destination' required)
+    button.mt-4.btn.btn-primary(type='submit') Download

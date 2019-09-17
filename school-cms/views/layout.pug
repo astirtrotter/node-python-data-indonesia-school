@@ -6,12 +6,12 @@ html
     title= title
     include partials/styles
     include partials/scripts
-    link(rel='stylesheet', href='/css/style.css')
   body
-  
+
     +flash-messages(messages)
 
-    block content
+    .container
+      block content
+    
     .py-5
-
     include layouts/footer
