@@ -12,11 +12,22 @@ html
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='.navbar-collapse')
         span.navbar-toggler-icon
       .collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item
-            a.nav-link(href='/download') Download
-          li.nav-item
-            a.nav-link(href='/convert') Convert
+        if user
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a.nav-link(href='/download') Download
+            li.nav-item
+              a.nav-link(href='/convert') Convert
+        
+        ul.navbar-nav.ml-auto
+          if !user
+            li.nav-item
+              a.nav-link(href='/auth/login') Log In
+            li.nav-item
+              a.nav-link(href='/auth/signup') Sign Up
+          else
+            li.nav-item
+              a.nav-link(href='/auth/logout?_method=POST') Log Out
 
     .container.mt-4
       +flash-messages(messages)
