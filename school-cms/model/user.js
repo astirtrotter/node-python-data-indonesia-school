@@ -1,7 +1,14 @@
 var getUsers = (criteria, cb) => {
-  var query = 'SELECT * from `user`';
+  var query = 'SELECT * FROM `user`';
   // todo
+  if (criteria) {
+    var subs = [];
+    if (criteria.id)    subs.push(` id='${criteria.id}'`);
+    if (criteria.email) subs.push(` email='${criteria.email}'`);
+    if (criteria.name)  subs.push(` name='${criteria.name}'`);
 
+    if (subs.length > 0) query += ' WHERE ' + subs.join(' AND ');
+  }
 
   db.query(query, cb);
 }
@@ -17,5 +24,6 @@ exports.findUser = (criteria, cb) => {
 }
 
 exports.comparePassword = (pwdCandidate, pwdHash) => {
-  return true;
+  // todo: use bcrypt
+  return pwdCandidate === pwdHash;
 }
