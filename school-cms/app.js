@@ -11,17 +11,22 @@ var fileUpload = require('express-fileupload');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var cors = require('cors');
+var mysql = require('mysql');
 
 var app = express();
 var passport = require('./middleware/passport');
+var dbConfig = require('./config/db');
 
-var sessionStore = new MySQLStore({
-  host: process.env.MYSQL_HOST,
-  port: process.env.MYSQL_PORT,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
+var db = mysql.createConnection(dbConfig);
+db.connect(err => {
+  if (err) {
+    throw err;
+  }
+  console.log('Connected to database');
 });
+global.db = db;
+
+var sessionStore = new MySQLStore(dbConfig);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
