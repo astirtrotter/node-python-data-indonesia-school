@@ -5,14 +5,15 @@ var { spawn } = require('child_process');
 const logOutput = (name) => (message) => console.log(`[${name}] ${message}`);
 
 router.get('/', async function (req, res, next) {
-  try {
-    const output = await downloadJson();
-    logOutput('main')(output.message);
-    res.send('Success');
-  } catch (e) {
-    console.error('Error during download json script running ', e.stack);
-    res.send('Failed');
-  }
+  res.render('convert');
+  // try {
+  //   const output = await downloadJson();
+  //   logOutput('main')(output.message);
+  //   res.send('Success');
+  // } catch (e) {
+  //   console.error('Error during download json script running ', e.stack);
+  //   res.send('Failed');
+  // }
 });
 
 async function downloadJson() {
