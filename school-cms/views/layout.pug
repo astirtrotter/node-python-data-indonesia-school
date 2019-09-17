@@ -8,5 +8,10 @@ html
     include partials/scripts
     link(rel='stylesheet', href='/css/style.css')
   body
+  
     +flash-messages(messages)
+
     block content
+    .py-5
+
+    include layouts/footer
