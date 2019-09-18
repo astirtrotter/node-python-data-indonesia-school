@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fsUtil = require('../util/fs');
 
 var { spawn } = require('child_process');
 const logOutput = (name) => (message) => console.log(`[${name}] ${message}`);
@@ -9,6 +10,8 @@ router.get('/', async function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
+  fsUtil.writeUrls(req.body.destination, req.body.url);
+
   res.json({ success: true });
   // try {
   //   const output = await downloadJson();

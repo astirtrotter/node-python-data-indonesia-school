@@ -12,3 +12,9 @@ exports.getDirectories = source => {
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 }
+
+exports.writeUrls = (dest, urls) => {
+  this.makeDirectoryIfNotExist('data');
+  this.makeDirectoryIfNotExist(`data/${dest}`);
+  fs.writeFileSync(`data/${dest}/urls.txt`, urls);
+}
