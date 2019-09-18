@@ -3,5 +3,8 @@ extends layout
 block content
   form(method='POST', action=`/convert`)
     label(for='source') Source
-    input#source.form-control(type='text', name='source', placeholder='Directory Name' required)
+    select#source.custom-select(name='source' required)
+      each directory in directories
+        option(value=directory) #{directory}
+
     button.mt-4.btn.btn-primary(type='submit') Convert
