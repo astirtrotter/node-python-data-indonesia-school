@@ -14,7 +14,9 @@ class Main:
         self.dest = sys.argv[1]
         if (self.dest not in os.listdir('data')):
             os.mkdir("data/{}".format(self.dest))
+        if ('schools' not in os.listdir('data/{}'.format(self.dest))):
             os.mkdir("data/{}/schools".format(self.dest))
+        if ('done.json' not in os.listdir('data/{}'.format(self.dest))):
             f = open("data/{}/done.json".format(self.dest), 'w')
             f.write('{}')
             f.close()

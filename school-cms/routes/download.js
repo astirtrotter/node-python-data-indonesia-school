@@ -12,20 +12,20 @@ router.get('/', async function (req, res, next) {
 router.post('/', function (req, res, next) {
   fsUtil.writeUrls(req.body.destination, req.body.url);
 
-  res.json({ success: true });
-  // try {
-  //   const output = await downloadJson();
-  //   logOutput('main')(output.message);
-  //   res.send('Success');
-  // } catch (e) {
-  //   console.error('Error during download json script running ', e.stack);
-  //   res.send('Failed');
-  // }
+  // res.json({ success: true });
+  try {
+    const output = downloadJson(req.body.destination);
+    logOutput('main')(output.message);
+    res.send('Success');
+  } catch (e) {
+    console.error('Error during download json script running ', e.stack);
+    res.send('Failed');
+  }
 });
 
-async function downloadJson() {
+async function downloadJson(dest) {
   return new Promise((resolve, reject) => {
-    const processDownload = spawn('python', ['./dapo_spider.py']);
+    const processDownload = spawn('python3', ['dapo_spider.py', dest]);
 
     const out = [];
     processDownload.stdout.on('data', (data) => {
