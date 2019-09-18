@@ -9,49 +9,39 @@ router.get('/', async function (req, res, next) {
   res.render('download', { title: 'Download' });
 });
 
-router.post('/', function (req, res, next) {
-  fsUtil.writeUrls(req.body.destination, req.body.url);
-
-  // res.json({ success: true });
+router.post('/', async function (req, res, next) {
+  fsUtil.writeUrls(req.body.destination, req.body.url + '\n');
   try {
-    const output = downloadJson(req.body.destination);
-    logOutput('main')(output.message);
-    res.send('Success');
+    const subprocess = runScript(req.body.destination);
+    res.set('Content-Type', 'text/plain');
+    subprocess.stdout.pipe(res);
+    subprocess.stderr.pipe(res);
   } catch (e) {
     console.error('Error during download json script running ', e.stack);
     res.send('Failed');
   }
 });
 
-async function downloadJson(dest) {
-  return new Promise((resolve, reject) => {
-    const processDownload = spawn('python3', ['dapo_spider.py', dest]);
+function runScript(dest) {
+  const processDownload = spawn('python3', ['-u', 'dapo_spider.py', dest]);
 
-    const out = [];
-    processDownload.stdout.on('data', (data) => {
-      out.push(data.toString());
-      logOutput('stdout')(data);
-    });
-
-    const err = [];
-    processDownload.stderr.on('data', (data) => {
-      err.push(data.toString());
-      logOutput('stderr')(data);
-    });
-
-    processDownload.on('exit', (code, signal) => {
-      logOutput('exit')(`${code} (${signal})`);
-      if (code !== 0) {
-        reject(new Error(err.join('\n')));
-        return;
-      }
-      try {
-        resolve(JSON.parse(out[0]));
-      } catch (e) {
-        reject(e);
-      }
-    });
+  processDownload.stdout.on('data', (data) => {
+    logOutput('download-stdout')(data);
   });
+
+  processDownload.stderr.on('data', (data) => {
+    logOutput('download-stderr')(data);
+  });
+
+  processDownload.on('exit', (code, signal) => {
+    logOutput('download-exit')(`${code} (${signal})`);
+  });
+
+  processDownload.on('close', () => {
+    logOutput('download-close')(``);
+  });
+
+  return processDownload;
 }
 
 module.exports = router;

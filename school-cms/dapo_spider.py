@@ -11,7 +11,10 @@ import sys
 
 class Main:
     def __init__(self):
-        self.dest = sys.argv[1]
+        self.log(str(sys.argv))
+        self.dest = sys.argv[1] # dest directory name
+        if ('data' not in os.listdir(os.getcwd())):
+            os.mkdir('data')
         if (self.dest not in os.listdir('data')):
             os.mkdir("data/{}".format(self.dest))
         if ('schools' not in os.listdir('data/{}'.format(self.dest))):
@@ -304,6 +307,7 @@ class Main:
 
     def log(self, msg, state='info'):
         print(state.upper() + ": " + str(msg))
+
 
 
 if __name__ == '__main__':
